@@ -1,10 +1,14 @@
 """Base entity for Ripple — backed by the coordinator's entity feed."""
 from __future__ import annotations
 
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .const import DOMAIN
 from .coordinator import RippleCoordinator
-from .entity_map import device_info_for
+from .entity_map import device_info_for, entity_domain
 
 
 class RippleEntity(CoordinatorEntity[RippleCoordinator]):
@@ -41,3 +45,32 @@ class RippleEntity(CoordinatorEntity[RippleCoordinator]):
     @property
     def device_info(self):
         return device_info_for(self._device)
+
+
+def async_setup_ripple_entities(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+    domain: str,
+    factory,
+) -> None:
+    """Create entities for ``domain`` now, and again whenever the server feed
+    grows new ones — so a newly-paired device or a new sensor (e.g. a gateway's
+    packets/online sensors) shows up without an HA restart. Removal is handled
+    by the coordinator pruning the device/entity registry."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]
+    known: set[str] = set()
+
+    @callback
+    def _discover() -> None:
+        fresh = []
+        for eid in coordinator.data.get("entities", {}):
+            if eid in known or entity_domain(eid) != domain:
+                continue
+            known.add(eid)
+            fresh.append(factory(coordinator, eid))
+        if fresh:
+            async_add_entities(fresh)
+
+    _discover()
+    entry.async_on_unload(coordinator.async_add_listener(_discover))
