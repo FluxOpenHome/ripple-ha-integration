@@ -13,7 +13,10 @@ from .const import (
     DOMAIN,
     PLATFORMS,
 )
+from homeassistant.helpers import device_registry as dr
+
 from .coordinator import RippleCoordinator
+from .entity_map import device_info_for
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -26,6 +29,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+
+    # Register EVERY device on the account up front (from /user/api/devices) so
+    # they all appear in the UI, the integration card shows a real device count
+    # (like other integrations), and each device can be opened — even before its
+    # entities load. Entities created by the platforms below then attach via
+    # matching identifiers (see device_info_for).
+    device_reg = dr.async_get(hass)
+    for device in coordinator.data.get("devices", {}).values():
+        device_reg.async_get_or_create(
+            config_entry_id=entry.entry_id,
+            **device_info_for(device),
+        )
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
