@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ripple",
+        "description": "Log in with your Ripple account to bring all your devices and entities into Home Assistant.",
+        "data": { "email": "Email", "password": "Password", "server_url": "Server URL" }
+      }
+    },
+    "error": { "invalid_auth": "Invalid email or password", "cannot_connect": "Could not reach the Ripple server" },
+    "abort": { "already_configured": "This account is already set up" }
+  }
+}
