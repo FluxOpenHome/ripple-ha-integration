@@ -1,12 +1,14 @@
 {
-  "domain": "ripple",
+  "domain": "ripple_irrigation",
   "name": "Ripple",
-  "codeowners": ["@FluxOpenHome"],
+  "codeowners": [
+    "@FluxOpenHome"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/FluxOpenHome/ripple-ha-integration",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/FluxOpenHome/ripple-ha-integration/issues",
   "requirements": [],
-  "version": "0.2.0"
+  "version": "0.3.0"
 }

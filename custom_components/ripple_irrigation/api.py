@@ -68,6 +68,27 @@ class RippleApiClient:
         except aiohttp.ClientError as err:
             raise RippleApiError(str(err)) from err
 
+    async def get_bundle(self) -> tuple[list[dict], list[dict]]:
+        """One-request consolidated feed: (devices, entities).
+
+        Falls back to the two legacy endpoints if the server predates
+        /user/api/ha/entities."""
+        if not self._authed:
+            await self.login()
+        try:
+            async with self._session.get(f"{self._base}/user/api/ha/entities") as resp:
+                if resp.status == 404:
+                    return await self.get_devices(), await self.get_entities()
+                if resp.status in (401, 403):
+                    self._authed = False
+                    await self.login()
+                    return await self.get_bundle()
+                resp.raise_for_status()
+                data = await resp.json()
+                return data.get("devices", []) or [], data.get("entities", []) or []
+        except aiohttp.ClientError as err:
+            raise RippleApiError(str(err)) from err
+
     async def get_devices(self) -> list[dict]:
         data = await self._get("/user/api/devices")
         if isinstance(data, dict):

@@ -11,6 +11,10 @@ DOMAIN_TO_PLATFORM = {
     "binary_sensor": "binary_sensor",
     "switch": "switch",
     "number": "number",
+    "select": "select",
+    "text": "text",
+    "time": "time",
+    "button": "button",
 }
 
 # substring in entity_id -> (device_class, unit)
@@ -47,10 +51,14 @@ def device_info_for(device: dict) -> DeviceInfo:
     dev_id = str(device.get("id", "")) or "unknown"
     name = device.get("display_name") or device.get("mac_address") or "Ripple Device"
     model = {
-        "lora_gateway": "Ripple LoRa Gateway",
-        "lora_extender": "Ripple LoRa Extender",
-        "lora_probe": "Gophr LoRa Probe",
-        "controller": "Ripple Irrigation Controller",
+        "controller": "keepr Irrigation Controller",
+        "remote": "beetl Remote",
+        "blue_remote": "beetl Remote",
+        "probe": "gophr Moisture Probe",
+        "thermo": "frogg Thermo Sensor",
+        "lora_probe": "gophr LoRa Probe",
+        "lora_gateway": "magpi Gateway",
+        "lora_extender": "pidgn Extender",
     }.get(device.get("device_category", ""), "Ripple Device")
     info = DeviceInfo(
         identifiers={(DOMAIN, dev_id)},

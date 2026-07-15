@@ -34,8 +34,7 @@ class RippleCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self) -> dict:
         try:
-            devices = await self.client.get_devices()
-            entities = await self.client.get_entities()
+            devices, entities = await self.client.get_bundle()
         except RippleAuthError as err:
             raise ConfigEntryAuthFailed(str(err)) from err
         except RippleApiError as err:
