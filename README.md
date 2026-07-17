@@ -18,14 +18,4 @@ Log in with your **Ripple** account and get **native, controllable Home Assistan
 
 ## Upgrading from ≤ 0.2.0
 
-v0.3.0 renamed the integration domain from `ripple` to `ripple_irrigation` (the old domain collided with Home Assistant's built-in XRP "ripple" integration, which is also why the wrong logo appeared). After updating: remove the old integration entry in Settings → Devices & Services, restart HA, and add **Ripple** again.
-
-## Logo / brand icon
-
-As of Home Assistant **2026.3.0**, custom integrations ship their own brand images — the central [home-assistant/brands](https://github.com/home-assistant/brands) repository no longer accepts custom-integration icons ([announcement](https://developers.home-assistant.io/blog/2026/02/24/brands-proxy-api)). The assets live in [`custom_components/ripple_irrigation/brand/`](custom_components/ripple_irrigation/brand/):
-
-- `icon.png` / `icon@2x.png` — the Ripple droplet mark (256×256 / 512×512, works on light and dark)
-- `logo.png` / `logo@2x.png` — the navy Ripple wordmark (for light theme)
-- `dark_logo.png` / `dark_logo@2x.png` — the white Ripple wordmark (for dark theme)
-
-Local brand images are auto-detected and take priority over the brands CDN — no PR or manifest change needed. Requires HA 2026.3+; on older versions HA shows a neutral placeholder.
+v0.3.0 renamed the integration domain from `ripple` to `ripple_irrigation`. After updating: remove the old integration entry in Settings → Devices & Services, restart HA, and add **Ripple** again.
