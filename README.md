@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/FluxOpenHome/ripple-ha-integration/main/custom_components/ripple_irrigation/brand/logo%402x.png" alt="Ripple" height="72">
+
 # Ripple — Home Assistant Integration
 
 Log in with your **Ripple** account and get **native, controllable Home Assistant entities** for all your devices — zones, schedules, weather, moisture, and the LoRa network (magpi gateways, pidgn extenders, gophr probes). No add-on or MQTT broker required.
